@@ -1,0 +1,77 @@
+import pandas as pd 
+import numpy as np 
+from sklearn import preprocessing 
+from sklearn.model_selection import train_test_split 
+from sklearn.preprocessing import StandardScaler 
+from sklearn.tree import DecisionTreeClassifier 
+import graphviz 
+from sklearn import tree 
+from IPython.display import Image 
+ 
+# Load dataset 
+df = pd.read_csv("PlayTennis.csv") 
+print("Original Dataset:") 
+print(df) 
+ 
+# Encode string labels into integers 
+le = preprocessing.LabelEncoder() 
+for col in df.columns: 
+    if df[col].dtype == 'object': 
+        df[col] = le.fit_transform(df[col]) 
+ 
+print("\nEncoded Dataset:") 
+print(df) 
+ 
+# Split features and target 
+x = df.iloc[:, 0:4].values  # Features (first 4 columns) 
+y = df.iloc[:, -1].values   # Target (last column) 
+ 
+print("\nFeatures (X):\n", x) 
+print("\nTarget (y):\n", y) 
+ 
+# Train-test split 
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=1)
+print("\nShapes:") 
+print("x_train:", x_train.shape) 
+print("y_train:", y_train.shape) 
+print("x_test:", x_test.shape) 
+print("y_test:", y_test.shape) 
+ 
+# Standardization 
+scaler = StandardScaler() 
+x_train_std = scaler.fit_transform(x_train) 
+x_test_std = scaler.transform(x_test) 
+ 
+print("\nStandardized Features:") 
+print("x_train:\n", x_train_std) 
+print("x_test:\n", x_test_std) 
+ 
+# Train Decision Tree Classifier 
+model = DecisionTreeClassifier(criterion='gini', max_depth=4) 
+model.fit(x_train_std, y_train) 
+ 
+# Prediction and evaluation 
+y_predict = model.predict(x_test_std) 
+print("\nPredictions:") 
+print("Actual y_test:", y_test) 
+print("Predicted y:", y_predict) 
+ 
+print("\nAccuracy:") 
+print("Training Accuracy:", model.score(x_train_std, y_train)) 
+print("Testing Accuracy:", model.score(x_test_std, y_test)) 
+ 
+# Visualize decision tree 
+dot_data = tree.export_graphviz( 
+    model, 
+    out_file=None, 
+    feature_names=['outlook', 'temperature', 'humidity', 'wind'], 
+    class_names=['no', 'yes'],
+    filled=True, 
+    rounded=True, 
+    special_characters=True 
+) 
+graph = graphviz.Source(dot_data) 
+graph.render("playtennis", format='jpg')  # Generates 'playtennis.jpg' 
+ 
+# Display the image (if running in a notebook or supported environment) 
+Image('playtennis.jpg') 

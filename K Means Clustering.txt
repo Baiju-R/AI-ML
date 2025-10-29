@@ -1,0 +1,21 @@
+import numpy as np 
+import pandas as pd 
+from sklearn.cluster import KMeans 
+from sklearn.datasets import load_iris 
+ 
+# Load the iris dataset 
+iris = load_iris() 
+X = iris.data
+# Create a KMeans object with 3 clusters 
+kmeans = KMeans(n_clusters=3) 
+ 
+# Fit the KMeans object to the dataset 
+kmeans.fit(X) 
+ 
+# Print the cluster centroids 
+print("Cluster Centroids:") 
+print(kmeans.cluster_centers_) 
+ 
+# Print the predicted labels for each sample 
+print("\nPredicted Labels:") 
+print(kmeans.labels_) 

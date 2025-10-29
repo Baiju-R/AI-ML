@@ -1,0 +1,65 @@
+#BFS
+from collections import deque 
+ 
+# Graph represented as an adjacency list 
+graph = { 
+    0: [1, 3], 
+    1: [0, 2], 
+    2: [1, 3], 
+    3: [0, 2] 
+}
+# Initialize visited list 
+visited = [False] * 4 
+ 
+# Recursive BFS Function 
+def bfs_recursive(queue): 
+    if not queue: 
+        return 
+    current = queue.popleft() 
+    print(f"Visited Node {current}") 
+    for neighbor in graph[current]: 
+        if not visited[neighbor]: 
+            visited[neighbor] = True 
+            queue.append(neighbor) 
+    bfs_recursive(queue) 
+ 
+# Start BFS 
+start_node = 0 
+visited[start_node] = True 
+queue = deque([start_node]) 
+ 
+print("Recursive BFS Traversal Starting from Node 0:") 
+bfs_recursive(queue)
+
+#DFS
+from collections import deque 
+ 
+# Graph represented as an adjacency list 
+graph = { 
+    0: [1, 3], 
+    1: [0, 2], 
+    2: [1, 3], 
+    3: [0, 2] 
+}
+# Initialize visited list 
+visited = [False] * 4 
+ 
+# Recursive BFS Function 
+def bfs_recursive(queue): 
+    if not queue: 
+        return 
+    current = queue.popleft() 
+    print(f"Visited Node {current}") 
+    for neighbor in graph[current]: 
+        if not visited[neighbor]: 
+            visited[neighbor] = True 
+            queue.append(neighbor) 
+    bfs_recursive(queue) 
+ 
+# Start BFS 
+start_node = 0 
+visited[start_node] = True 
+queue = deque([start_node]) 
+ 
+print("Recursive BFS Traversal Starting from Node 0:") 
+bfs_recursive(queue)

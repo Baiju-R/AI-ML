@@ -1,0 +1,55 @@
+# Function to calculate prior and conditional probabilities 
+def train_naive_bayes(data): 
+    total = len(data) 
+    class_counts = {} 
+    feature_counts = {} 
+     
+    for row in data: 
+        age, income, label = row 
+        class_counts[label] = class_counts.get(label, 0) + 1 
+         
+        for feature, value in zip(['Age', 'Income'], [age, income]): 
+            if feature not in feature_counts: 
+                feature_counts[feature] = {} 
+            if value not in feature_counts[feature]: 
+                feature_counts[feature][value] = {} 
+            feature_counts[feature][value][label] = feature_counts[feature][value].get(label, 0) + 1 
+     
+    return class_counts, feature_counts, total 
+ 
+# Function to predict class based on input features 
+def predict_naive_bayes(class_counts, feature_counts, total, input_features): 
+    probabilities = {} 
+    for label in class_counts: 
+        # Start with prior probability 
+        prob = class_counts[label] / total 
+        for feature, value in input_features.items(): 
+            count = feature_counts.get(feature, {}).get(value, {}).get(label, 0) 
+            prob *= count / class_counts[label]  # Conditional probability 
+        probabilities[label] = prob 
+    return max(probabilities, key=probabilities.get) 
+ 
+# Dataset: AGE, INCOME, BUYS_COMPUTER (LABEL) 
+dataset = [ 
+    ['Young', 'High', 'No'], 
+    ['Young', 'High', 'No'], 
+    ['Middle', 'High', 'Yes'], 
+    ['Senior', 'Medium', 'Yes'], 
+    ['Senior', 'Low', 'Yes'], 
+    ['Senior', 'Low', 'No'], 
+    ['Middle', 'Low', 'Yes'], 
+    ['Young', 'Medium', 'No'], 
+    ['Young', 'Low', 'Yes'], 
+    ['Senior', 'Medium', 'Yes'], 
+] 
+ 
+# Train the model 
+class_counts, feature_counts, total = train_naive_bayes(dataset) 
+ 
+# Predict for new input 
+test_input = {'Age': 'Senior', 'Income': 'Medium'} 
+prediction = predict_naive_bayes(class_counts, feature_counts, total, test_input) 
+ 
+# Output 
+print("Test Input:", test_input) 
+print("Predicted Class:", prediction)
